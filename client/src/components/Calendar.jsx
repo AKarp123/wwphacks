@@ -1,9 +1,10 @@
 import React from "react";
-import { Grid, Container, Typography } from "@mui/material";
+import { Grid, Container, Typography, Divider } from "@mui/material";
 import UserContext from "../User";
 import {db} from "../firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import CalendarCard from "./CalendarCard";
+import CalendarForm from "./CalendarForm";
 
 export default function Calendar() {
     const user = React.useContext(UserContext);
@@ -34,7 +35,14 @@ export default function Calendar() {
                         <CalendarCard assignment={assignment} />
                     </Grid>
                 ))}
+                
             </Grid>
+            <Divider 
+            sx={{
+                my: "20px"
+            }}
+            />
+            <CalendarForm />
         </Container>
     );
 }
