@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import UserContext from "../User";
-import { signOut } from "../firebase";
+import { signIn, signOut } from "../firebase";
 import { Link } from "react-router-dom";
 
 const pages = ["Home", "Calendar", "Timer"];
@@ -23,6 +23,7 @@ const ResponsiveAppBar = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const user = React.useContext(UserContext);
+    console.log(user);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -38,10 +39,15 @@ const ResponsiveAppBar = () => {
     const handleCloseUserMenu = (e) => {
         e.preventDefault();
         setAnchorElUser(null);
-        if (e.target.innerHTML === "Logout") {
+
+        console.log(e.target)
+        if (e.target.innerHTML === "Log Out") {
             signOut();
         } else if (e.target.innerHTML === "Change Theme") {
             user.switchTheme();
+        } else if (e.target.innerHTML === "Log In") {
+
+            signIn();
         }
     };
 
@@ -186,26 +192,40 @@ const ResponsiveAppBar = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {user === null ? (
-                                <MenuItem onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">
-                                        Change Theme
-                                    </Typography>
-                                </MenuItem>
-                            ) : (
-                                [
-                                    <MenuItem onClick={handleCloseUserMenu} key={1}>
-                                        <Typography textAlign="center">
-                                            Log Out
-                                        </Typography>
-                                    </MenuItem>,
-                                    <MenuItem onClick={handleCloseUserMenu} key={2}>
-                                        <Typography textAlign="center">
-                                            Change Theme
-                                        </Typography>
-                                    </MenuItem>,
-                                ]
-                            )}
+                            {user.userAuth === null
+                                ? [
+                                      <MenuItem onClick={handleCloseUserMenu}>
+                                          <Typography textAlign="center">
+                                              Change Theme
+                                          </Typography>
+                                      </MenuItem>,
+                                      <MenuItem
+                                          onClick={handleCloseUserMenu}
+                                          key={1}
+                                      >
+                                          <Typography textAlign="center">
+                                              Log In
+                                          </Typography>
+                                      </MenuItem>,
+                                  ]
+                                : [
+                                      <MenuItem
+                                          onClick={handleCloseUserMenu}
+                                          key={1}
+                                      >
+                                          <Typography textAlign="center">
+                                              Log Out
+                                          </Typography>
+                                      </MenuItem>,
+                                      <MenuItem
+                                          onClick={handleCloseUserMenu}
+                                          key={2}
+                                      >
+                                          <Typography textAlign="center">
+                                              Change Theme
+                                          </Typography>
+                                      </MenuItem>,
+                                  ]}
                         </Menu>
                     </Box>
                 </Toolbar>

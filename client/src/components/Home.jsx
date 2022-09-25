@@ -8,7 +8,7 @@ export default function Home() {
     return (
         <div className="App">
             <Typography variant="h1">
-                {user ? user.displayName : "Hello World"}
+                {user ? user.userAuth.displayName : "Hello World"}
             </Typography>
 
             {user ? null : (

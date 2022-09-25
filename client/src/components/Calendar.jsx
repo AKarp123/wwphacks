@@ -8,7 +8,7 @@ import CalendarForm from "./CalendarForm";
 
 export default function Calendar() {
     const user = React.useContext(UserContext);
-    const [data, loading, error] = useCollectionData(db.collection(`users/${user.uid}/assignments`,).orderBy("dueDate", "asc"), {idField: "id"});
+    const [data, loading, error] = useCollectionData(db.collection(`users/${user.userAuth.uid}/assignments`,).orderBy("dueDate", "asc").limit(4), {idField: "id"});
 
 
     

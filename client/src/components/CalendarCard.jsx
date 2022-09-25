@@ -11,11 +11,11 @@ import { db } from "../firebase";
 import UserContext from "../User";
 
 export default function CalendarCard({ assignment }) {
-    const { uid } = React.useContext(UserContext);
+    const data = React.useContext(UserContext);
     const changeStatus = async () => {
         const query = db
             .collection("users")
-            .doc(uid)
+            .doc(data.userAuth.uid)
             .collection("assignments")
             .doc(assignment.id);
 
@@ -58,7 +58,9 @@ export default function CalendarCard({ assignment }) {
                 <Button size="small" onClick={changeStatus}>
                     Change Status
                 </Button>
-                <Button size="small">
+                <Button size="small" onClick={() => {
+                    data.pomoFunctions.addPomodoro({...assignment})
+                }}>
                     Add to Pomodoro
                 </Button>
             </CardActions>

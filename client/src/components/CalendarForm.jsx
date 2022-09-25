@@ -56,19 +56,18 @@ export default function CalendarForm() {
         month: 0,
         year: 0,
     });
-    const { uid } = React.useContext(UserContext);
+    const { userAuth } = React.useContext(UserContext);
 
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        console.log(new Date(state.year, state.month, state.day, state.hours, state.minutes, state.seconds));
-
-        const query = db.collection(`users/${uid}/assignments`)
+        console.log(new Date(state.year, state.month-1, state.day, state.hours, state.minutes, state.seconds));
+        const query = db.collection(`users/${userAuth.uid}/assignments`)
 
         await query.add({
             subject: state.subject,
             description: state.description,
-            dueDate: new Date(state.year, state.month, state.day, state.hours, state.minutes, state.seconds),
+            dueDate: new Date(state.year, state.month-1, state.day, state.hours, state.minutes, state.seconds),
         });
 
         dispatch({ type: "SUBMIT" });

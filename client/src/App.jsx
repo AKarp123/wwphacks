@@ -11,6 +11,7 @@ import Calendar from "./components/Calendar";
 import Timer from "./components/Timer";
 import Home from "./components/Home";
 import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
     const [themeState, setThemeState] = useState(false); //false == light, true == dark
@@ -27,14 +28,57 @@ function App() {
             },
         },
     });
+
+    const [pomoList, setPomoList] = useState([]);
+
+    const popPomodoro = () => {
+        const newList = pomoList;
+        newList.shift()
+        setPomoList(newList);
+        console.log(pomoList);
+    };
+    const addPomodoro = (task) => {
+        const newList = pomoList;
+        if (newList.length > 0) {
+            newList.push({
+                description: "Break",
+                subject: "Break",
+                duration: 5,
+                id: uuidv4(),
+            });
+        }
+        newList.push({
+            ...task,
+            duration: 25,
+        });
+        setPomoList(newList);
+        console.log(pomoList);
+    };
     useEffect(() => {
         setThemeState(JSON.parse(localStorage.getItem("theme")));
-    }, [])
-    console.log(themeState)
+    }, []);
+
     const [user, loading, error] = useAuthState(app.auth);
 
     if (loading) {
         return <Typography>Loading...</Typography>;
+    }
+
+    if (user === null) {
+        return (
+            <Button
+                onClick={() => app.signIn()}
+                variant="contained"
+                sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                }}
+            >
+                Sign In
+            </Button>
+        );
     }
 
     const switchTheme = () => {
@@ -45,7 +89,17 @@ function App() {
     return (
         <ThemeProvider theme={themeState ? darkTheme : lightTheme}>
             <CssBaseline />
-            <UserContext.Provider value={{ ...user, switchTheme }}>
+            <UserContext.Provider
+                value={{
+                    userAuth: user,
+                    switchTheme,
+                    pomoList: pomoList,
+                    pomoFunctions: {
+                        popPomodoro,
+                        addPomodoro,
+                    },
+                }}
+            >
                 <Navbar />
                 <Switch>
                     <Route exact path="/" component={Home} />
